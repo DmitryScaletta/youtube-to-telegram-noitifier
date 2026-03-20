@@ -69,9 +69,11 @@ const main = async () => {
   }
 
   console.log('[gist] Fetching config.json and cache.json...');
-  const gist = await fetchGist(GIST_URL, GIST_TOKEN);
+  const [configContent, cacheContent] = await Promise.all([
+    fetchGist(GIST_URL, 'config.json'),
+    fetchGist(GIST_URL, 'cache.json'),
+  ]);
 
-  const configContent = gist.files['config.json']?.content;
   if (!configContent) {
     console.error('[error] No config.json found in gist, exiting.');
     process.exit(0);
@@ -83,7 +85,6 @@ const main = async () => {
     process.exit(0);
   }
 
-  const cacheContent = gist.files['cache.json']?.content;
   const cache: Cache = cacheContent ? JSON.parse(cacheContent) : {};
 
   // chatId -> messages[]

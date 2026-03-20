@@ -1,26 +1,23 @@
-import type { GistFiles, GistResponse } from './types.ts';
+import type { GistFiles } from './types.ts';
 
-const getGistId = (url: string) => {
+const parseGist = (url: string) => {
   const parts = url.split('/');
-  return parts[parts.length - 1];
+  return {
+    id: parts[parts.length - 1],
+    username: parts[parts.length - 2],
+  };
 };
 
-export const fetchGist = async (gistUrl: string, gistToken: string) => {
-  const gistId = getGistId(gistUrl);
-  const response = await fetch(`https://api.github.com/gists/${gistId}`, {
-    headers: {
-      Authorization: `Bearer ${gistToken}`,
-      Accept: 'application/vnd.github+json',
-    },
-  });
-
-  if (!response.ok) {
+export const fetchGist = async (gistUrl: string, filename: string) => {
+  const gist = parseGist(gistUrl);
+  const url = `https://gist.githubusercontent.com/${gist.username}/${gist.id}/raw/${filename}`;
+  const res = await fetch(url);
+  if (!res.ok) {
     throw new Error(
-      `Failed to fetch gist: ${response.status} ${response.statusText}`,
+      `Failed to fetch gist file ${filename}: ${res.status} ${res.statusText}`,
     );
   }
-
-  return response.json() as Promise<GistResponse>;
+  return res.text();
 };
 
 export const updateGist = async (
@@ -28,8 +25,8 @@ export const updateGist = async (
   gistToken: string,
   files: GistFiles,
 ) => {
-  const gistId = getGistId(gistUrl);
-  const response = await fetch(`https://api.github.com/gists/${gistId}`, {
+  const gist = parseGist(gistUrl);
+  const response = await fetch(`https://api.github.com/gists/${gist.id}`, {
     method: 'PATCH',
     headers: {
       Authorization: `Bearer ${gistToken}`,

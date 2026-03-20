@@ -41,8 +41,3 @@ export type GistFiles = {
   'cache.json'?: { content: string };
   'README.md'?: { content: string };
 };
-
-export type GistResponse = {
-  files: GistFiles;
-  updated_at: string;
-};
