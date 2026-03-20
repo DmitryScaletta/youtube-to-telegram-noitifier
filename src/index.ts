@@ -1,4 +1,4 @@
-import type { Config, Cache, YouTubeVideo } from './types.ts';
+import type { Config, Cache, YouTubeVideo, ChannelCache } from './types.ts';
 import { fetchGist, updateGist } from './gist.ts';
 import { getChannelInfo, getPlaylistVideos } from './youtube.ts';
 import { formatMessage, sendToChannelWithDelay } from './telegram.ts';
@@ -10,15 +10,27 @@ const checkKeywordsInDesc = (desc: string, keywords: string[]) => {
 };
 
 const generateReadme = (config: Config, cache: Cache) => {
+  const getChannelTitle = (channelInfo: ChannelCache, channelUrl: string) =>
+    channelInfo.title || channelInfo.handle || channelUrl;
+
   const lastUpdatedAt = formatDateTime(new Date());
   let md = `# YouTube to Telegram Notifier\n\n`;
   md += `Last Update: ${lastUpdatedAt}\n\n`;
+
+  for (const { channelUrl, triggers } of config) {
+    for (const { keywordsInDesc } of Object.values(triggers)) {
+      const channelTitle = getChannelTitle(cache[channelUrl], channelUrl);
+      const channelTitleHash = channelTitle.toLowerCase().replaceAll(' ', '-');
+      md += ` - [${channelTitle}](#${channelTitleHash}) - ${keywordsInDesc.join(', ')}\n`;
+    }
+  }
+  md += '\n';
 
   for (const { channelUrl, titleExcludedPhrases = [], triggers } of config) {
     const channelInfo = cache[channelUrl];
     if (!channelInfo || channelInfo.videos.length === 0) continue;
 
-    const channelTitle = channelInfo.title || channelInfo.handle || channelUrl;
+    const channelTitle = getChannelTitle(channelInfo, channelUrl);
     for (const [triggerId, { keywordsInDesc }] of Object.entries(triggers)) {
       const keywords = keywordsInDesc.join(', ');
       md += `## ${channelTitle}\n\n`;
