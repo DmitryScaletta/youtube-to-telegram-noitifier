@@ -64,7 +64,7 @@ const main = async () => {
   const { TG_BOT_TOKEN, YOUTUBE_API_KEY, GIST_URL, GIST_TOKEN } = process.env;
 
   if (!TG_BOT_TOKEN || !YOUTUBE_API_KEY || !GIST_URL || !GIST_TOKEN) {
-    console.error('Missing required environment variables');
+    console.error('[error] Missing required environment variables');
     process.exit(1);
   }
 
