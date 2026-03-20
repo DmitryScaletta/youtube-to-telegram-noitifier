@@ -112,6 +112,8 @@ export const getPlaylistVideos = async (
       }
     }
 
+    if (publishedAfter) break;
+
     nextPageToken = response.data.nextPageToken || undefined;
 
     if (nextPageToken) await timers.setTimeout(500);
