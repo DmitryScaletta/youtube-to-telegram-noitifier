@@ -114,7 +114,7 @@ export const getPlaylistVideos = async (
 
     nextPageToken = response.data.nextPageToken || undefined;
 
-    if (nextPageToken) await timers.setTimeout(1000);
+    if (nextPageToken) await timers.setTimeout(500);
   } while (nextPageToken);
 
   videos.sort(
