@@ -1,4 +1,4 @@
-# Youtube to Telegram Notifier
+# YouTube to Telegram Notifier
 
 Automatically checks YouTube channels for new videos and sends notifications to Telegram chats when video descriptions contain specific keywords.
 

@@ -1,7 +1,7 @@
 {
   "name": "youtube-to-telegram-notifier",
   "version": "0.1.0",
-  "description": "",
+  "description": "Automatically checks YouTube channels for new videos and sends notifications to Telegram chats when video descriptions contain specific keywords.",
   "keywords": [],
   "author": "DmitryScaletta",
   "license": "MIT",

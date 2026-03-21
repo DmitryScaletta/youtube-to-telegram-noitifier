@@ -1,4 +1,4 @@
-name: Youtube to Telegram Notifier
+name: YouTube to Telegram Notifier
 
 on:
   schedule:
