@@ -8,7 +8,7 @@ export const formatMessage = (template: string, video: Video) =>
     .replaceAll('{publishedAt}', formatDateTime(new Date(video.publishedAt)))
     .replaceAll('{viewCount}', video.viewCount.toString())
     .replaceAll('{likeCount}', video.likeCount.toString())
-    .replaceAll('{link}', `https://youtu.be/${video.id}`);
+    .replaceAll('{link}', `https://youtu\\.be/${video.id}`);
 
 export const sendTelegramMessage = async (
   botToken: string,
